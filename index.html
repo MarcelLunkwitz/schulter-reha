@@ -13,13 +13,30 @@
     body { background:#F6F6F4; }
     #root { max-width:480px; margin:0 auto; }
   </style>
+  <!-- Preload React before Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="text/babel" data-presets="react">
+  <script>
+// Inline Babel transform - handles large files
+(function() {
+  var babelScript = document.createElement('script');
+  babelScript.src = 'https://unpkg.com/@babel/standalone/babel.min.js';
+  babelScript.onload = function() {
+    Babel.registerPreset('custom', {
+      presets: [['react']]
+    });
+    var appScript = document.getElementById('app-source').textContent;
+    var transformed = Babel.transform(appScript, { presets: ['react'] }).code;
+    var fn = new Function('React', 'ReactDOM', transformed + '\nReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));');
+    fn(React, ReactDOM);
+  };
+  document.head.appendChild(babelScript);
+})();
+  </script>
+  <script id="app-source" type="text/plain">
 const { useState, useEffect } = React;
 
 const FONT_CSS = `
@@ -340,7 +357,7 @@ const T = {
 };
 
 // ─── APP ──────────────────────────────────────────────────────
-export default function App() {
+function App() {
   const [tab, setTab]           = useState("plan");
   const [sessions, setSessions] = useState(INIT_SESSIONS);
   const [library, setLibrary]   = useState(INIT_LIBRARY);
@@ -1195,8 +1212,6 @@ const btnPri = { flex:1, background:"#007AFF", color:"#fff", border:"none", bord
 const btnSec = { flex:1, background:"#F2F2F7", color:"#3C3C43", border:"none", borderRadius:10, padding:"12px", fontSize:14, fontWeight:600, cursor:"pointer", fontFamily:"'Söhne', 'Söhne-Buch', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif" };
 const iconBtn= { background:"none", border:"1px solid #E8E8E4", borderRadius:4, padding:"4px 8px", fontSize:12, cursor:"pointer", color:"#AAAAAA" };
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(React.createElement(App));
   </script>
 </body>
 </html>
