@@ -1,0 +1,17 @@
+{
+  "name": "Schulter Reha",
+  "short_name": "Reha",
+  "description": "Post-operative Schulterrehabilitation",
+  "start_url": "/test/",
+  "display": "standalone",
+  "background_color": "#F6F6F4",
+  "theme_color": "#F6F6F4",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230F0F0F'/><text y='.9em' font-size='70' x='15'>💪</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
